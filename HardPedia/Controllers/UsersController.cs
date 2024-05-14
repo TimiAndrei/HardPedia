@@ -89,6 +89,26 @@ namespace HardPedia.Controllers
 
         }
 
+        // delete a user
+        public IActionResult DeleteUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult DeleteUser(string id)
+        {
+            IdentityUser user = _context.Users.Find(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            Console.Out.WriteLine(id);
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+            return RedirectToAction("ListUsers");
+        }
+
 
     }
 }

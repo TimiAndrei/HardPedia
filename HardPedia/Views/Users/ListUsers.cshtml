@@ -13,7 +13,7 @@
                 <p class="card-text">@user.Email</p>
                 <p class="card-text">@user.PhoneNumber</p>
                 <a href="@Url.Action("EditUser", "Users", new { id = user.Id })" class="btn btn-primary">Edit</a>
-                <a href="@Url.Action("Delete", "Users", new { id = user.Id })" class="btn btn-danger">Delete</a>
+                <a href="@Url.Action("DeleteUser", "Users", new { id = user.Id })" class="btn btn-danger">Delete</a>
             </div>
         </div>
     }
