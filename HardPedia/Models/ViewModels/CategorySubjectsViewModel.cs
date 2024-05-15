@@ -11,6 +11,12 @@ public class CategorySubjectsViewModel
     public int TotalPages { get; set; }
     public int CurrentPage { get; set; }
 
+    public CategorySubjectsViewModel()
+    {
+        Subjects = new List<Subject>();
+        CategoryName = string.Empty;
+    }
+
     public CategorySubjectsViewModel(Guid categoryId, string categoryName, string? categoryDescription, List<Subject> subjects, int totalPages, int currentPage)
     {
         CategoryId = categoryId;

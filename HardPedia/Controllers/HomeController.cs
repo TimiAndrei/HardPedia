@@ -44,6 +44,33 @@ namespace HardPedia.Controllers
             return View();
         }
 
+        public IActionResult AddCategory()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCategory(CategoryFormViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var category = new HardPedia.Models.Domain.Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = model.Name,
+                    Description = model.Description
+                };
+
+                _context.Categories.Add(category);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(model);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
