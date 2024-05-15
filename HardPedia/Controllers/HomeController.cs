@@ -1,12 +1,8 @@
 using HardPedia.Data;
 using HardPedia.Models;
-using HardPedia.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HardPedia.Controllers
 {
@@ -21,22 +17,13 @@ namespace HardPedia.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10)
+        public IActionResult Index()
         {
-            var categories = await _context.Categories
+            var categories = _context.Categories
                 .Include(c => c.Subjects)
-                .ToListAsync();
+                .ToList();
 
-            var categoryViewModels = categories.Select(c => new CategorySubjectsViewModel(
-                c.Id,
-                c.Name,
-                c.Description,
-                c.Subjects.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList(),
-                (int)Math.Ceiling(c.Subjects.Count / (double)pageSize),
-                pageNumber
-            )).ToList();
-
-            return View(categoryViewModels);
+            return View(categories);
         }
 
         public IActionResult Privacy()
@@ -49,27 +36,11 @@ namespace HardPedia.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddCategory(CategoryFormViewModel model)
+        public IActionResult EditCategory()
         {
-            if (ModelState.IsValid)
-            {
-                var category = new HardPedia.Models.Domain.Category
-                {
-                    Id = Guid.NewGuid(),
-                    Name = model.Name,
-                    Description = model.Description
-                };
-
-                _context.Categories.Add(category);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(model);
+            return View();
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

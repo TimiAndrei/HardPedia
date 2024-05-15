@@ -1,10 +1,4 @@
-﻿@model IEnumerable<HardPedia.Models.ViewModels.CategorySubjectsViewModel>
-
-@{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="container">
+﻿<div class="container">
     <h1>Categories</h1>
     <div class="row">
         @foreach (var category in Model)
@@ -12,8 +6,8 @@
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">@category.CategoryName</h5>
-                        <p class="card-text">@category.CategoryDescription</p>
+                        <h5 class="card-title">@category.Name</h5>
+                        <p class="card-text">@category.Description</p>
                         <ul class="list-group list-group-flush">
                             @foreach (var subject in category.Subjects)
                             {
@@ -22,19 +16,19 @@
                         </ul>
                     </div>
                     <div class="card-footer">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center">
-                                @for (int i = 1; i <= category.TotalPages; i++)
-                                {
-                                    <li class="page-item @(i == category.CurrentPage ? "active" : "")">
-                                        <a class="page-link" asp-action="Index" asp-route-pageNumber="@i">@i</a>
-                                    </li>
-                                }
-                            </ul>
-                        </nav>
+                        <a href="@Url.Action("EditCategory", "Home", new { id = category.Id })" class="btn btn-primary">Edit</a>
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@category.Name', '@Url.Action("DeleteCategory", "Home", new { id = category.Id })')">Delete</button>
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
+
+<script>
+    function confirmDelete(categoryName, deleteUrl) {
+        if (confirm("Are you sure you want to delete the category '" + categoryName + "'?")) {
+            window.location.href = deleteUrl;
+        }
+    }
+</script>
