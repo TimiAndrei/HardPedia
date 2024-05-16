@@ -1,7 +1,15 @@
-﻿<div class="container">
+﻿@using HardPedia.Models.Domain
+@model List<Category>
+
+@{
+    List<Category> categories = Model;
+    ViewData["Title"] = "Categories";
+}
+
+<div class="container">
     <h1>Categories</h1>
     <div class="row">
-        @foreach (var category in Model)
+        @foreach (Category category in Model)
         {
             <div class="col-md-4 mb-4">
                 <div class="card">
@@ -16,8 +24,8 @@
                         </ul>
                     </div>
                     <div class="card-footer">
-                        <a href="@Url.Action("EditCategory", "Home", new { id = category.Id })" class="btn btn-primary">Edit</a>
-                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@category.Name', '@Url.Action("DeleteCategory", "Home", new { id = category.Id })')">Delete</button>
+                        <a asp-controller="Category" asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-primary">Edit</a>
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@category.Name', '@Url.Action("DeleteCategory", "Category", new { id = category.Id })')">Delete</button>
                     </div>
                 </div>
             </div>

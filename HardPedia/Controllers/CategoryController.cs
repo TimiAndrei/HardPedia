@@ -20,27 +20,28 @@ namespace HardPedia.Controllers
             return View(categories);
         }
 
-        public IActionResult Create()
+        [HttpGet]
+        public IActionResult AddCategory()
         {
             return View();
         }
 
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Category category)
+        public IActionResult AddCategory(Category category)
         {
             if (ModelState.IsValid)
             {
                 category.Id = Guid.NewGuid();
                 _context.Categories.Add(category);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             return View(category);
         }
 
-
-        public IActionResult Edit(Guid id)
+        [HttpGet]
+        public IActionResult EditCategory(Guid id)
         {
             var category = _context.Categories.FirstOrDefault(c => c.Id == id);
             if (category == null)
@@ -51,8 +52,7 @@ namespace HardPedia.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(Guid id, Category category)
+        public IActionResult UpdateCategory(Guid id, Category category)
         {
             if (id != category.Id)
             {
@@ -77,14 +77,13 @@ namespace HardPedia.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
             return View(category);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(Guid id)
+        [HttpGet]
+        public IActionResult DeleteCategory(Guid id)
         {
             var category = _context.Categories.FirstOrDefault(c => c.Id == id);
             if (category == null)
@@ -95,7 +94,7 @@ namespace HardPedia.Controllers
             _context.Categories.Remove(category);
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Home");
         }
 
 
