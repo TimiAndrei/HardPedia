@@ -19,6 +19,8 @@ public class Subject
 
     public ICollection<Category> Categories { get; set; } = [];
 
+    public ICollection<Comment> Comments { get; set; } = [];
+
     public Subject()
     {
         CreatedOn = DateTime.Now;
