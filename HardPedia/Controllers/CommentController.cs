@@ -2,6 +2,7 @@
 using HardPedia.Models;
 using HardPedia.Models.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HardPedia.Controllers
 {
@@ -51,14 +52,9 @@ namespace HardPedia.Controllers
         [HttpPost]
         public IActionResult AddComment(Guid subjectId, Guid userId, Comment comment)
         {
-            Console.WriteLine("Comment: " + comment.Content);
 
-            
-                
-
-            //if (ModelState.IsValid)
-            //{
-                Console.WriteLine("Valid comment: " + comment.Content);
+            if (ModelState.IsValid)
+            {
                 comment.Id = Guid.NewGuid();
                 comment.SubjectId = subjectId;
                 comment.UserId = userId;
@@ -66,11 +62,11 @@ namespace HardPedia.Controllers
                 _context.Comments.Add(comment);
                 _context.SaveChanges();
                 return RedirectToAction("Index", "Home");
-            //}
+            }
+            ViewBag.SubjectId = subjectId;
+            ViewBag.UserId = userId;
+            return View(comment);
 
-            //return NotFound();
-            
-            
         }
 
     }
