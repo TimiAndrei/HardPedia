@@ -20,13 +20,15 @@
                             @foreach (var subject in category.Subjects)
                             {
                                 <li class="list-group-item">@subject.Title</li>
+                                <a asp-controller="Comment" asp-action="AddComment" asp-route-subjectId="@subject.Id" class="btn btn-primary">Add Comment</a>
                             }
                         </ul>
                     </div>
                     <div class="card-footer">
                         <a asp-controller="Category" asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-primary">Edit</a>
                         <button type="button" class="btn btn-danger" onclick="confirmDelete('@category.Name', '@Url.Action("DeleteCategory", "Category", new { id = category.Id })')">Delete</button>
-                        <a asp-controller="Subject" asp-action="AddSubject" asp-route-id="@category.Id" class="btn btn-primary">Add Subject</a>
+                        <a asp-controller="Subject" asp-action="AddSubject" asp-route-categoryId="@category.Id" class="btn btn-primary">Add Subject</a>
+                        
                     </div>
                 </div>
             </div>
