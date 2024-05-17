@@ -26,6 +26,7 @@
                     <div class="card-footer">
                         <a asp-controller="Category" asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-primary">Edit</a>
                         <button type="button" class="btn btn-danger" onclick="confirmDelete('@category.Name', '@Url.Action("DeleteCategory", "Category", new { id = category.Id })')">Delete</button>
+                        <a asp-controller="Subject" asp-action="AddSubject" asp-route-id="@category.Id" class="btn btn-primary">Add Subject</a>
                     </div>
                 </div>
             </div>

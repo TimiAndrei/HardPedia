@@ -16,7 +16,7 @@ namespace HardPedia.Controllers
 
         public IActionResult Index()
         {
-            var categories = _context.Categories.ToList();
+            var categories = _context.Categories.Include(c => c.Subjects).ToList();
             return View(categories);
         }
 
