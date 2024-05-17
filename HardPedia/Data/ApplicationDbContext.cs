@@ -31,7 +31,6 @@ namespace HardPedia.Data
                 entity.Property(s => s.Heading).IsRequired();
                 entity.Property(s => s.Title).IsRequired();
                 entity.Property(s => s.Content).IsRequired();
-                entity.Property(s => s.UrlHandle).IsRequired();
                 entity.Property(s => s.Author).IsRequired();
                 entity.Property(s => s.Visible).HasDefaultValue(true);
             });
