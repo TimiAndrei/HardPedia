@@ -9,41 +9,53 @@
 
 <div class="container">
     <h1>Categories</h1>
-    @foreach (Category category in Model)
-    {
-        <div class="col mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">@category.Name</h5>
-                    <p class="card-text">@category.Description</p>
-                    <div id="subject-container-@category.Id" class="subject-container">
-                        @{
-                            var latestSubject = category.Subjects.OrderByDescending(s => s.CreatedOn).FirstOrDefault();
-                            if (latestSubject != null)
-                            {
-                                <div class="subject-content" data-current-subject-id="@latestSubject.Id">
-                                    <div class="subject-title">
-                                        <a href="@Url.Action("ListSubject", "Subject", new { id = latestSubject.Id })" class="subject-link">@latestSubject.Title</a>
+
+    <form id="search-form" onsubmit="return performSearch(event)">
+        <div class="form-group">
+            <input type="text" id="search-query" class="form-control" placeholder="Search for categories, subjects, or authors" oninput="performSearch(event)">
+        </div>
+    </form>
+    &nbsp;
+
+    <div id="search-results"></div>
+
+    <div id="categories-container">
+        @foreach (Category category in Model)
+        {
+            <div class="col mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">@category.Name</h5>
+                        <p class="card-text">@category.Description</p>
+                        <div id="subject-container-@category.Id" class="subject-container">
+                            @{
+                                var latestSubject = category.Subjects.OrderByDescending(s => s.CreatedOn).FirstOrDefault();
+                                if (latestSubject != null)
+                                {
+                                    <div class="subject-content" data-current-subject-id="@latestSubject.Id">
+                                        <div class="subject-title">
+                                            <a href="@Url.Action("ListSubject", "Subject", new { id = latestSubject.Id })" class="subject-link">@latestSubject.Title</a>
+                                        </div>
+                                        <p>@latestSubject.GetShortContent()</p>
                                     </div>
-                                    <p>@latestSubject.GetShortContent()</p>
-                                </div>
+                                }
                             }
+                        </div>
+                        @if (category.Subjects.Count > 1)
+                        {
+                            <div class="pagination-buttons">
+                                <button class="btn btn-secondary" onclick="fetchSubject('@category.Id', '@Url.Action("GetSubject", "Category")', 'previous')">Previous</button>
+                                <button class="btn btn-secondary" onclick="fetchSubject('@category.Id', '@Url.Action("GetSubject", "Category")', 'next')">Next</button>
+                            </div>
                         }
                     </div>
-                    @if (category.Subjects.Count > 1)
-                    {
-                        <div class="pagination-buttons">
-                            <button class="btn btn-secondary" onclick="fetchSubject('@category.Id', '@Url.Action("GetSubject", "Category")', 'previous')">Previous</button>
-                            <button class="btn btn-secondary" onclick="fetchSubject('@category.Id', '@Url.Action("GetSubject", "Category")', 'next')">Next</button>
-                        </div>
-                    }
-                </div>
-                <div class="card-footer">
-                    <a asp-controller="Category" asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-primary">Edit</a>
-                    <button type="button" class="btn btn-danger" onclick="confirmDelete('@category.Name', '@Url.Action("DeleteCategory", "Category", new { id = category.Id })')">Delete</button>
-                    <a asp-controller="Subject" asp-action="AddSubject" asp-route-categoryId="@category.Id" class="btn btn-primary">Add Subject</a>
+                    <div class="card-footer">
+                        <a asp-controller="Category" asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-primary">Edit</a>
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@category.Name', '@Url.Action("DeleteCategory", "Category", new { id = category.Id })')">Delete</button>
+                        <a asp-controller="Subject" asp-action="AddSubject" asp-route-categoryId="@category.Id" class="btn btn-primary">Add Subject</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
