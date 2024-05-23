@@ -45,6 +45,18 @@ namespace HardPedia.Data
                       .WithMany(s => s.Categories)
                       .UsingEntity(j => j.ToTable("SubjectCategory"));
             });
+
+            modelBuilder.Entity<Comment>(entity =>
+            {
+                entity.Property(c => c.Content).IsRequired();
+                entity.Property(c => c.CreatedOn).HasDefaultValueSql("GETDATE()");
+                entity.HasOne(c => c.Subject)
+                      .WithMany(s => s.Comments)
+                      .HasForeignKey(c => c.SubjectId);
+                entity.HasOne(c => c.User)
+                      .WithMany()
+                      .HasForeignKey(c => c.UserId);
+            }); 
         }
     }
 }

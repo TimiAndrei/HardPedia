@@ -11,7 +11,7 @@ namespace HardPedia.Models.Domain
         public Guid SubjectId { get; set; }
         public Subject? Subject { get; set; }
 
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
         public IdentityUser? User { get; set; }
 

@@ -50,9 +50,8 @@ namespace HardPedia.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddComment(Guid subjectId, Guid userId, Comment comment)
+        public IActionResult AddComment(Guid subjectId, string userId, Comment comment)
         {
-
             if (ModelState.IsValid)
             {
                 comment.Id = Guid.NewGuid();
@@ -66,7 +65,6 @@ namespace HardPedia.Controllers
             ViewBag.SubjectId = subjectId;
             ViewBag.UserId = userId;
             return View(comment);
-
         }
 
     }
