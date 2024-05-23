@@ -9,11 +9,11 @@ namespace HardPedia.Models.Domain
         public DateTime CreatedOn { get; set; }
 
         public Guid SubjectId { get; set; }
-        public Subject Subject { get; set; }
+        public Subject? Subject { get; set; }
 
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
-        public IdentityUser User { get; set; }
+        public IdentityUser? User { get; set; }
 
         public Comment()
         {

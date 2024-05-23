@@ -20,3 +20,20 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.subject-title {
+    background-color: #f0f0f0;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.subject-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.subject-link:hover {
+    background-color: #e0e0e0;
+}

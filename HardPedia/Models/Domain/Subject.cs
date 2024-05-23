@@ -36,5 +36,10 @@ public class Subject
         CreatedOn = DateTime.Now;
     }
 
+    public string GetShortContent()
+    {
+        return Content.Length > 150 ? Content.Substring(0, 150) + "..." : Content + "...";
+    }
+
 
 }

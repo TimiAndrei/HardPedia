@@ -7,7 +7,6 @@
 <h2>Add Comment</h2>
 
 <form asp-action="AddComment" asp-controller="Comment" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" name="SubjectId" value="@ViewBag.SubjectId" />
     <input type="hidden" name="UserId" value="@ViewBag.UserId" />
     <div class="form-group">
@@ -17,16 +16,10 @@
     </div>
     &nbsp;&nbsp;
     <div class="form-group">
-        <input type="submit" value="Add" class="btn btn-primary" />
+        <button type="submit" class="btn btn-primary">Add Comment</button>
         &nbsp;&nbsp;
-        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel</a>
+        <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
     </div>
 
 
 </form>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
