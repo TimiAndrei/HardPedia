@@ -1,0 +1,24 @@
+﻿@model HardPedia.Models.Domain.Comment
+
+@{
+    ViewData["Title"] = "Edit Comment";
+}
+
+<h2>Edit Comment</h2>
+
+<form asp-action="EditComment" asp-controller="Comment" method="post">
+    <input type="hidden" name="Id" value="@Model.Id" />
+    <input type="hidden" name="SubjectId" value="@Model.SubjectId" />
+    <input type="hidden" name="UserId" value="@Model.UserId" />
+    <div class="form-group">
+        <label asp-for="Content" class="control-label"></label>
+        <textarea asp-for="Content" class="form-control">@Model.Content</textarea>
+
+    </div>
+    &nbsp;&nbsp;
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Update Comment</button>
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
+    </div>
+</form>

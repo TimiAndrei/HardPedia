@@ -1,0 +1,39 @@
+﻿@using HardPedia.Models.Domain
+@model Subject
+
+@{
+    ViewData["Title"] = "Subject Details";
+}
+<div class="container">
+    <div class="card mb-4">
+        <div class="card-body">
+            <h1>@Model.Title</h1>
+            <p><strong>Heading:</strong> @Model.Heading</p>
+            <p><strong>Content:</strong> @Model.Content</p>
+            <p><strong>Created On:</strong> @Model.CreatedOn</p>
+            <p><strong>Author:</strong> @Model.Author</p>
+        </div>
+    </div>
+
+    <a asp-controller="Comment" asp-action="AddComment" asp-route-subjectId="@Model.Id" class="btn btn-primary">Add Comment</a>
+
+    <h3>Comments</h3>
+    @foreach (var comment in Model.Comments)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <p><strong>Created On:</strong> @comment.CreatedOn</p>
+                <p><strong>Content:</strong> @comment.Content</p>
+                <p><strong>User:</strong> @(comment.User?.UserName ?? "Unknown")</p>
+
+                @if (User.Identity.Name == comment.User.UserName)
+                {
+                    <a asp-controller="Comment" asp-action="EditComment" asp-route-id="@comment.Id" class="btn btn-primary">Edit</a>
+                    <a asp-controller="Comment" asp-action="DeleteComment" asp-route-id="@comment.Id" class="btn btn-danger">Delete</a>
+                }
+            </div>
+        </div>
+    }
+
+    
+</div>

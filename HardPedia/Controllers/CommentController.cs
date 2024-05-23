@@ -26,28 +26,30 @@ namespace HardPedia.Controllers
             return View(comment);
         }
 
-        // add comment
         [HttpGet]
         public IActionResult AddComment(Guid subjectId)
         {
-            // get the user id
-            var userName = "";
-            var userId = "";
-            try
+            // Check if user is authenticated
+            if (!User.Identity.IsAuthenticated)
             {
-                userName = User.Identity.Name;
-                userId = _context.Users.FirstOrDefault(u => u.UserName == userName).Id;
+                return Redirect("~/Identity/Account/Login?ReturnUrl=" + Url.Action("AddComment", "Comment", new { subjectId }));
             }
-            catch
+
+            // User is authenticated, get the user id
+            var userName = User.Identity.Name;
+            var userId = _context.Users.FirstOrDefault(u => u.UserName == userName)?.Id;
+
+            // User is authenticated but id is not found
+            if (userId == null)
             {
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Error", "Home");
             }
-            
 
             ViewBag.SubjectId = subjectId;
             ViewBag.UserId = userId;
             return View();
         }
+
 
         [HttpPost]
         public IActionResult AddComment(Guid subjectId, string userId, Comment comment)
