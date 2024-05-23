@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel;
 
 namespace HardPedia.Areas.Identity.Pages.Account
 {
@@ -65,7 +66,7 @@ namespace HardPedia.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [EmailAddress]
+            [DisplayName("Email or Username")]
             public string Email { get; set; }
 
             /// <summary>
@@ -111,7 +112,9 @@ namespace HardPedia.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var userOrEmail = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+                userOrEmail ??= await _signInManager.UserManager.FindByNameAsync(Input.Email);
+                var result = await _signInManager.PasswordSignInAsync(userOrEmail, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
