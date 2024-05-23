@@ -29,7 +29,10 @@
                 @if (User.Identity.Name == comment.User.UserName)
                 {
                     <a asp-controller="Comment" asp-action="EditComment" asp-route-id="@comment.Id" class="btn btn-primary">Edit</a>
-                    <a asp-controller="Comment" asp-action="DeleteComment" asp-route-id="@comment.Id" class="btn btn-danger">Delete</a>
+                    <form asp-action="DeleteComment" asp-controller="Comment" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@comment.Id" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 }
             </div>
         </div>

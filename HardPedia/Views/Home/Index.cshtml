@@ -16,16 +16,27 @@
                 <div class="card-body">
                     <h5 class="card-title">@category.Name</h5>
                     <p class="card-text">@category.Description</p>
-                    <ul class="list-group list-group-flush">
-                        @foreach (var subject in category.Subjects)
-                        {
-                            <div class="subject-title">
-                                <a href="@Url.Action("ListSubject", "Subject", new { id = subject.Id })" class="subject-link">@subject.Title</a>
-                            </div>
-                            <p>@subject.GetShortContent()</p>
-                            <a asp-controller="Comment" asp-action="AddComment" asp-route-subjectId="@subject.Id" class="btn btn-primary">Add Comment</a>
+                    <div id="subject-container-@category.Id" class="subject-container">
+                        @{
+                            var latestSubject = category.Subjects.OrderByDescending(s => s.CreatedOn).FirstOrDefault();
+                            if (latestSubject != null)
+                            {
+                                <div class="subject-content" data-current-subject-id="@latestSubject.Id">
+                                    <div class="subject-title">
+                                        <a href="@Url.Action("ListSubject", "Subject", new { id = latestSubject.Id })" class="subject-link">@latestSubject.Title</a>
+                                    </div>
+                                    <p>@latestSubject.GetShortContent()</p>
+                                </div>
+                            }
                         }
-                    </ul>
+                    </div>
+                    @if (category.Subjects.Count > 1)
+                    {
+                        <div class="pagination-buttons">
+                            <button class="btn btn-secondary" onclick="fetchSubject('@category.Id', '@Url.Action("GetSubject", "Category")', 'previous')">Previous</button>
+                            <button class="btn btn-secondary" onclick="fetchSubject('@category.Id', '@Url.Action("GetSubject", "Category")', 'next')">Next</button>
+                        </div>
+                    }
                 </div>
                 <div class="card-footer">
                     <a asp-controller="Category" asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-primary">Edit</a>
