@@ -21,12 +21,14 @@ public class Subject
 
     public ICollection<Comment> Comments { get; set; } = [];
 
+    public string UserId { get; set; }
+
     public Subject()
     {
         CreatedOn = DateTime.Now;
     }
 
-    public Subject(string heading, string title, string content, string author, bool visible)
+    public Subject(string heading, string title, string content, string author, bool visible, string userId)
     {
         Heading = heading;
         Title = title;
@@ -34,11 +36,16 @@ public class Subject
         Author = author;
         Visible = visible;
         CreatedOn = DateTime.Now;
+        UserId = userId;
     }
+
+    // get short content function, but including the endlines
 
     public string GetShortContent()
     {
-        return Content.Length > 150 ? Content.Substring(0, 150) + "..." : Content + "...";
+        string shortContent = Content.Length > 1000 ? Content.Substring(0, 1000) + "..." : Content + "...";
+        //return shortContent.Replace("\n", "<br>");
+        return shortContent;
     }
 
 

@@ -9,17 +9,19 @@ function confirmDelete(categoryName, deleteUrl) {
         window.location.href = deleteUrl;
     }
 }
+
 function fetchSubject(categoryId, url, direction) {
     var currentSubjectId = document.querySelector(`#subject-container-${categoryId} .subject-content`).getAttribute('data-current-subject-id');
     fetch(`${url}?categoryId=${categoryId}&currentSubjectId=${currentSubjectId}&direction=${direction}`)
         .then(response => response.json())
         .then(data => {
+            var shortContent = formatShortContent(data.shortContent);
             document.querySelector(`#subject-container-${categoryId}`).innerHTML = `
                 <div class="subject-content" data-current-subject-id="${data.id}">
                     <div class="subject-title">
-                        <a href="/Subject/ListSubject?id=${data.id}" class="subject-link">${data.title}</a>
+                        <a href="/Subject/ListSubject?id=${data.id}" class="subject-link h4">${data.title}</a>
                     </div>
-                    <p>${data.shortContent}</p>
+                    <pre class="custom-short-content">${shortContent}</pre>
                 </div>
             `;
         })
@@ -27,6 +29,8 @@ function fetchSubject(categoryId, url, direction) {
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
+
+    formatInitialShortContent();
     const searchInput = document.getElementById('search-query');
     const searchUrl = searchInput.getAttribute('data-search-url');
 
@@ -48,9 +52,36 @@ function performSearch(event, searchUrl) {
     })
         .then(response => response.text())
         .then(html => {
-            document.getElementById('categories-container').innerHTML = html;
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            doc.querySelectorAll('p').forEach(p => {
+                const pre = document.createElement('pre');
+                pre.classList.add('custom-short-content');
+                pre.innerHTML = p.innerHTML.replace(/\n/g, '<br>');
+                p.replaceWith(pre);
+            });
+            
+            document.getElementById('categories-container').innerHTML = doc.documentElement.innerHTML;
+            console.log('Success:', doc.documentElement.innerHTML);
         })
         .catch(error => console.error('Error:', error));
 
     return false;
+}
+
+
+
+function formatShortContent(shortContent) {
+    return shortContent.replace(/\n/g, '<br>');
+}
+
+function formatInitialShortContent() {
+    const shortContentElements = document.querySelectorAll('.custom-short-content');
+
+    shortContentElements.forEach(element => {
+        const shortContent = element.textContent;
+        const formattedContent = formatShortContent(shortContent);
+        element.innerHTML = formattedContent;
+    });
 }
