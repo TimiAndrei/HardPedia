@@ -25,3 +25,32 @@ function fetchSubject(categoryId, url, direction) {
         })
         .catch(error => console.error('Error fetching subject:', error));
 }
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const searchInput = document.getElementById('search-query');
+    const searchUrl = searchInput.getAttribute('data-search-url');
+
+    searchInput.addEventListener('input', function (event) {
+        performSearch(event, searchUrl);
+    });
+});
+
+function performSearch(event, searchUrl) {
+    event.preventDefault();
+    const query = document.getElementById('search-query').value;
+
+    fetch(`${searchUrl}?query=${encodeURIComponent(query)}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('categories-container').innerHTML = html;
+        })
+        .catch(error => console.error('Error:', error));
+
+    return false;
+}

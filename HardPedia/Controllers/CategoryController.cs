@@ -21,6 +21,41 @@ public class CategoryController : Controller
     }
 
     [HttpGet]
+    public IActionResult Search(string query)
+    {
+        // If query is empty, return all categories
+        if (string.IsNullOrEmpty(query))
+        {
+            return PartialView("_CategoryListPartial", (List<Category>?)_context.Categories.Include(c => c.Subjects).ToList());
+        }
+
+        // Search for categories
+        var categories = _context.Categories
+            .Where(c => c.Name.Contains(query) || c.Description.Contains(query))
+            .Include(c => c.Subjects)
+            .ToList();
+
+        if (!categories.Any())
+        {
+            
+            // Search for subjects
+            var subjects = _context.Subjects
+                .Where(s => s.Title.Contains(query) || s.Content.Contains(query))
+                .Include(s => s.Categories)
+                .ToList();
+
+            if (!subjects.Any())
+            {
+                return NotFound();
+            }
+
+            categories = subjects.SelectMany(s => s.Categories).Distinct().ToList();
+        }
+
+        return PartialView("_CategoryListPartial", categories);
+    }
+
+    [HttpGet]
     public IActionResult AddCategory()
     {
         return View();
