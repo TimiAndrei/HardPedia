@@ -5,14 +5,15 @@
 @{
     List<Category> categories = Model;
     ViewData["Title"] = "Categories";
+    var searchUrl = Url.Action("Search", "Category");
 }
 
 <div class="container">
     <h1>Categories</h1>
 
-    <form id="search-form" onsubmit="return performSearch(event)">
+    <form id="search-form" onsubmit="return false;">
         <div class="form-group">
-            <input type="text" id="search-query" class="form-control" placeholder="Search for categories, subjects, or authors" oninput="performSearch(event)">
+            <input type="text" id="search-query" class="form-control" placeholder="Search for categories.." data-search-url="@searchUrl">
         </div>
     </form>
     &nbsp;

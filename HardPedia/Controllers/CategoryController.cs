@@ -21,6 +21,25 @@ public class CategoryController : Controller
     }
 
     [HttpGet]
+    public IActionResult Search(string query)
+    {
+        List<Category> categories;
+        if (string.IsNullOrEmpty(query))
+        {
+            categories = _context.Categories.Include(c => c.Subjects).ToList();
+        }
+        else
+        {
+            categories = _context.Categories
+                .Where(c => c.Name.Contains(query) || c.Description.Contains(query))
+                .Include(c => c.Subjects)
+                .ToList();
+        }
+
+        return PartialView("_CategoryListPartial", categories);
+    }
+
+    [HttpGet]
     public IActionResult AddCategory()
     {
         return View();
