@@ -1,8 +1,11 @@
-﻿@using HardPedia.Models.Domain
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@using HardPedia.Models.Domain
 @model Subject
 
 @{
     ViewData["Title"] = "Subject Details";
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 <script src="https://kit.fontawesome.com/45cd62c30b.js" crossorigin="anonymous"></script>
 
@@ -12,12 +15,27 @@
             <h1>@Model.Title</h1>
             <p><strong>Created On:</strong> @Model.CreatedOn by @Model.Author</p>
             <p>@Model.Heading</p>
-            <p>@Model.Content</p>
-            <a asp-controller="Comment" asp-action="AddComment" asp-route-subjectId="@Model.Id" class="btn btn-info"><i class="fa-regular fa-comment"></i>  Add Comment</a>
+            <pre class="custom-subject-content">@Model.Content</pre>
 
+            @if (userId == @Model.UserId)
+            {
+                <a asp-controller="Subject" asp-action="EditSubject" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fa-regular fa-pen-to-square"></i>  Edit</a>
+                <form asp-action="DeleteSubject" asp-controller="Subject" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button type="submit" class="btn btn-danger"><i class="fa-regular fa-trash-can"></i>  Delete</button>
+                </form>
+            }
+            else if (User.IsInRole("Moderator"))
+            {
+                <form asp-action="DeleteSubject" asp-controller="Subject" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button type="submit" class="btn btn-danger"><i class="fa-regular fa-trash-can"></i>  Delete</button>
+                </form>            
+}
+
+            <a asp-controller="Comment" asp-action="AddComment" asp-route-subjectId="@Model.Id" class="btn btn-info"><i class="fa-regular fa-comment"></i>  Add Comment</a>
         </div>
     </div>
-
 
     <div class="mt-3">
         <a asp-controller="Subject" asp-action="SortComments" asp-route-id="@Model.Id" asp-route-sortBy="newest" class="btn btn-success"><i class="fa-regular fa-circle-down"></i>  Sort by Newest</a>
@@ -29,10 +47,8 @@
     {
         <div class="card mb-3">
             <div class="card-body">
-
-                <p>@(comment.User?.UserName ?? "Unknown") commented on: @comment.CreatedOn</p>
-                <p> @comment.Content</p>
-
+                <p><strong>@(comment.User?.UserName ?? "Unknown")</strong> commented on: @comment.CreatedOn</p>
+                <p>@comment.Content</p>
 
                 @if (User.Identity.Name == comment.User.UserName)
                 {

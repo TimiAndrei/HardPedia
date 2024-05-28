@@ -17,19 +17,36 @@ public class SubjectController : Controller
     [HttpGet]
     public IActionResult AddSubject(Guid categoryId)
     {
+        // Check if user is authenticated
+        if (!User.Identity.IsAuthenticated)
+        {
+            return Redirect("~/Identity/Account/Login?ReturnUrl=" + Url.Action("AddSubject", "Subject", new { categoryId }));
+        }
+
+        // User is authenticated, get the user id
+        var userName = User.Identity.Name;
+        var userId = _context.Users.FirstOrDefault(u => u.UserName == userName)?.Id;
+
+        // User is authenticated but id is not found
+        if (userId == null)
+        {
+            return RedirectToAction("Error", "Home");
+        }
+
         ViewBag.CategoryId = categoryId;
+        ViewBag.UserId = userId;
         return View();
     }
 
     [HttpPost]
-
-    public IActionResult AddSubject(Guid categoryId, Subject subject)
+    public IActionResult AddSubject(Guid categoryId, string userId, Subject subject)
     {
         if (ModelState.IsValid)
         {
             subject.Id = Guid.NewGuid();
             subject.CreatedOn = DateTime.Now;
-            subject.Visible = true; 
+            subject.Visible = true;
+            subject.UserId = userId; // Assuming you have a UserId property in the Subject model
 
             var category = _context.Categories.Include(c => c.Subjects).FirstOrDefault(c => c.Id == categoryId);
             if (category != null)
@@ -43,6 +60,7 @@ public class SubjectController : Controller
             }
         }
         ViewBag.CategoryId = categoryId;
+        ViewBag.UserId = userId;
         return View(subject);
     }
 
@@ -50,55 +68,46 @@ public class SubjectController : Controller
     public IActionResult EditSubject(Guid id)
     {
         var subject = _context.Subjects.FirstOrDefault(s => s.Id == id);
-        if (subject != null)
+        if (subject == null)
         {
-            return View(subject);
+            return NotFound();
         }
-        return RedirectToAction("Index", "Home");
-    }
 
-    [HttpPost]
-    public IActionResult EditSubject(Subject subject)
-    {
-        if (ModelState.IsValid)
-        {
-            var subjectToUpdate = _context.Subjects.FirstOrDefault(s => s.Id == subject.Id);
-            if (subjectToUpdate != null)
-            {
-                subjectToUpdate.Heading = subject.Heading;
-                subjectToUpdate.Title = subject.Title;
-                subjectToUpdate.Content = subject.Content;
-                subjectToUpdate.Visible = subject.Visible;
-
-                _context.SaveChanges();
-                return RedirectToAction("Index", "Home");
-            }
-        }
         return View(subject);
     }
 
-    [HttpGet]
-    public IActionResult DeleteSubject(Guid id)
+    [HttpPost]
+    public IActionResult EditSubject(Subject editedSubject)
     {
-        var subject = _context.Subjects.FirstOrDefault(s => s.Id == id);
-        if (subject != null)
+        var subject = _context.Subjects.FirstOrDefault(s => s.Id == editedSubject.Id);
+        if (subject == null)
         {
-            return View(subject);
+            return NotFound();
         }
-        return RedirectToAction("Index", "Home");
+
+        subject.Heading = editedSubject.Heading;
+        subject.Title = editedSubject.Title;
+        subject.Content = editedSubject.Content;
+        _context.SaveChanges();
+
+        return RedirectToAction("ListSubject", "Subject", new { id = subject.Id });
     }
 
     [HttpPost]
-    public IActionResult DeleteSubject(Subject subject)
+    public IActionResult DeleteSubject(Guid id)
     {
-        var subjectToDelete = _context.Subjects.FirstOrDefault(s => s.Id == subject.Id);
-        if (subjectToDelete != null)
+        var subject = _context.Subjects.FirstOrDefault(s => s.Id == id);
+        if (subject == null)
         {
-            _context.Subjects.Remove(subjectToDelete);
-            _context.SaveChanges();
+            return NotFound();
         }
+
+        _context.Subjects.Remove(subject);
+        _context.SaveChanges();
+
         return RedirectToAction("Index", "Home");
     }
+
 
     [HttpGet]
     public IActionResult ListSubject(Guid id)

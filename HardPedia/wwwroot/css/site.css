@@ -34,6 +34,21 @@ body {
     font-weight: bold;
 }
 
-.subject-link:hover {
-    background-color: #e0e0e0;
+.textarea-resize {
+    height: 300px; 
+    width: 100%; 
+    resize: vertical; 
+}
+
+.custom-subject-content {
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+
+}
+
+.custom-short-content {
+    white-space: nowrap;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

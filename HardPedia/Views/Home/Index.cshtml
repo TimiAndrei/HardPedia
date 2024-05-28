@@ -37,8 +37,7 @@
                                         <div class="subject-title">
                                             <a href="@Url.Action("ListSubject", "Subject", new { id = latestSubject.Id })" class="subject-link h4">@latestSubject.Title</a>
                                         </div>
-                                        <p>@latestSubject.GetShortContent()</p>
-                                        
+                                        <pre class="custom-short-content">@latestSubject.GetShortContent()</pre>
                                     </div>
                                 }
                             }
