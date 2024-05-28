@@ -15,9 +15,10 @@
                         {
                             <div class="subject-content" data-current-subject-id="@latestSubject.Id">
                                 <div class="subject-title">
-                                    <a href="@Url.Action("ListSubject", "Subject", new { id = latestSubject.Id })" class="subject-link">@latestSubject.Title</a>
+                                    <a href="@Url.Action("ListSubject", "Subject", new { id = latestSubject.Id })" class="subject-link h4">@latestSubject.Title</a>
                                 </div>
                                 <p>@latestSubject.GetShortContent()</p>
+
                             </div>
                         }
                     }
@@ -25,15 +26,19 @@
                 @if (category.Subjects.Count > 1)
                 {
                     <div class="pagination-buttons">
-                        <button class="btn btn-secondary" onclick="fetchSubject('@category.Id', '@Url.Action("GetSubject", "Category")', 'previous')">Previous</button>
-                        <button class="btn btn-secondary" onclick="fetchSubject('@category.Id', '@Url.Action("GetSubject", "Category")', 'next')">Next</button>
+                        <button class="btn btn-secondary" onclick="fetchSubject('@category.Id', '@Url.Action("GetSubject", "Category")', 'previous')">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <button class="btn btn-secondary" onclick="fetchSubject('@category.Id', '@Url.Action("GetSubject", "Category")', 'next')">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                 }
             </div>
             <div class="card-footer">
-                <a asp-controller="Category" asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-primary">Edit</a>
-                <button type="button" class="btn btn-danger" onclick="confirmDelete('@category.Name', '@Url.Action("DeleteCategory", "Category", new { id = category.Id })')">Delete</button>
-                <a asp-controller="Subject" asp-action="AddSubject" asp-route-categoryId="@category.Id" class="btn btn-primary">Add Subject</a>
+                <a asp-controller="Category" asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-primary"><i class="fa-regular fa-pen-to-square"></i>  Edit</a>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete('@category.Name', '@Url.Action("DeleteCategory", "Category", new { id = category.Id })')"><i class="fa-regular fa-trash-can"></i>  Delete</button>
+                <a asp-controller="Subject" asp-action="AddSubject" asp-route-categoryId="@category.Id" class="btn btn-info"><i class="fa-regular fa-square-plus"></i>  Add Subject</a>
             </div>
         </div>
     </div>

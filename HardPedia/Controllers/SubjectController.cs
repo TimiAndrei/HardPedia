@@ -119,5 +119,33 @@ public class SubjectController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+    public IActionResult SortComments(Guid id, string sortBy)
+    {
+        var subject = _context.Subjects
+                             .Include(s => s.Categories)
+                             .Include(s => s.Comments)
+                                 .ThenInclude(c => c.User)
+                             .FirstOrDefault(s => s.Id == id);
+
+        if (subject != null)
+        {
+            switch (sortBy)
+            {
+                case "newest":
+                    subject.Comments = subject.Comments.OrderByDescending(c => c.CreatedOn).ToList();
+                    break;
+                case "oldest":
+                    subject.Comments = subject.Comments.OrderBy(c => c.CreatedOn).ToList();
+                    break;
+                default:
+                    break;
+            }
+
+            return View("ListSubject", subject);
+        }
+
+        return RedirectToAction("Index", "Home");
+    }
+
 
 }
