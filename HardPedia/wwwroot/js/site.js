@@ -17,7 +17,7 @@ function fetchSubject(categoryId, url, direction) {
             document.querySelector(`#subject-container-${categoryId}`).innerHTML = `
                 <div class="subject-content" data-current-subject-id="${data.id}">
                     <div class="subject-title">
-                        <a href="/Subject/ListSubject?id=${data.id}" class="subject-link">${data.title}</a>
+                        <a href="/Subject/ListSubject?id=${data.id}" class="subject-link h4">${data.title}</a>
                     </div>
                     <p>${data.shortContent}</p>
                 </div>

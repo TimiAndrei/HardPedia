@@ -55,11 +55,24 @@
                             </div>
                         }
                     </div>
-                    <div class="card-footer">
-                        <a asp-controller="Category" asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-primary"><i class="fa-regular fa-pen-to-square"></i>  Edit</a>
-                        <button type="button" class="btn btn-danger" onclick="confirmDelete('@category.Name', '@Url.Action("DeleteCategory", "Category", new { id = category.Id })')"><i class="fa-regular fa-trash-can"></i>  Delete</button>
-                        <a asp-controller="Subject" asp-action="AddSubject" asp-route-categoryId="@category.Id" class="btn btn-info"><i class="fa-regular fa-square-plus"></i>  Add Subject</a>
-                    </div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.IsInRole("Moderator"))
+                        {
+                            <div class="card-footer">
+                                <a asp-controller="Category" asp-action="EditCategory" asp-route-id="@category.Id" class="btn btn-primary"><i class="fa-regular fa-pen-to-square"></i>  Edit</a>
+                                <button type="button" class="btn btn-danger" onclick="confirmDelete('@category.Name', '@Url.Action("DeleteCategory", "Category", new { id = category.Id })')"><i class="fa-regular fa-trash-can"></i>  Delete</button>
+                                <a asp-controller="Subject" asp-action="AddSubject" asp-route-categoryId="@category.Id" class="btn btn-info"><i class="fa-regular fa-square-plus"></i>  Add Subject</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="card-footer">
+                                <a asp-controller="Subject" asp-action="AddSubject" asp-route-categoryId="@category.Id" class="btn btn-info"><i class="fa-regular fa-square-plus"></i>  Add Subject</a>
+                            </div>
+                        }
+                    }
+
                 </div>
             </div>
         }
