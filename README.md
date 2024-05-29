@@ -34,6 +34,24 @@ CRUD (Create, Read, Update, Delete) operations are implemented for key entities 
 
 Users can search for posts based on subjects or categories. The search system is in real time and efficient, providing relevant results quickly.
 
-## Conclusion
+### 6. Application preview 🖼️
+
+This is the landing page where all categories are shown by default with the latest subject posted and the ability to paginate over all subjects, but also search for specify categories or subjects.
+
+If the user is logged in, the Add Subject option will be available. If the user is an admin he can add a new category, or if the user is a moderator he can delete a subject.
+
+The users that created the subjects can edit or delete them.
+
+![HardPediaPreview](https://github.com/TimiAndrei/HardPedia/blob/8f68248fa2c17f772dc81466db32e4fee8501018/Preview/HardPediaPreview.png)
+
+Each subject can have multiple comments, and the user can add a new comment, edit or delete it later. The moderators can delete any comment.
+
+![SubjectComments](https://github.com/TimiAndrei/HardPedia/blob/8f68248fa2c17f772dc81466db32e4fee8501018/Preview/Comments.png)
+
+Users can modify their profile, change their password, or delete their account.
+
+![UserProfile](https://github.com/TimiAndrei/HardPedia/blob/8f68248fa2c17f772dc81466db32e4fee8501018/Preview/Account.png)
+
+## Conclusion 🎯
 
 This project was a collaborative effort between two university colleagues. By using ASP.NET Core and Entity Framework Core, we created a forum where users can share and seek knowledge about hard skills. We focused on providing a clear structure, efficient search functionality, and robust authentication to deliver a useful application.
