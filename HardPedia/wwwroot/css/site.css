@@ -47,8 +47,14 @@ body {
 }
 
 .custom-short-content {
-    white-space: nowrap;
+    white-space: pre-wrap;
     word-wrap: break-word;
+    max-height: 300px;
     overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 10px;
+    box-sizing: border-box;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 20;
 }
+

@@ -39,12 +39,10 @@ public class Subject
         UserId = userId;
     }
 
-    // get short content function, but including the endlines
-
+    
     public string GetShortContent()
     {
         string shortContent = Content.Length > 1000 ? Content.Substring(0, 1000) + "..." : Content + "...";
-        //return shortContent.Replace("\n", "<br>");
         return shortContent;
     }
 

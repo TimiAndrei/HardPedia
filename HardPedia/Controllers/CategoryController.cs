@@ -23,7 +23,6 @@ public class CategoryController : Controller
     [HttpGet]
     public IActionResult Search(string query)
     {
-        // If query is empty, return all categories
         if (string.IsNullOrEmpty(query))
         {
             return PartialView("_CategoryListPartial", (List<Category>?)_context.Categories.Include(c => c.Subjects).ToList());
@@ -38,7 +37,6 @@ public class CategoryController : Controller
         if (!categories.Any())
         {
             
-            // Search for subjects
             var subjects = _context.Subjects
                 .Where(s => s.Title.Contains(query) || s.Content.Contains(query))
                 .Include(s => s.Categories)
