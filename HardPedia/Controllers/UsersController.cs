@@ -37,7 +37,7 @@ namespace HardPedia.Controllers
             {
                    return NotFound();
             }
-            // get the role
+
             var userRole = _context.UserRoles.FirstOrDefault(ur => ur.UserId == user.Id);
             var role = _context.Roles.Find(userRole.RoleId);
             
@@ -47,8 +47,6 @@ namespace HardPedia.Controllers
             }
 
             var userDTO = new UserDTO(user.Id, user.UserName, user.Email, user.PhoneNumber, role.Name);
-
-            // get the role names from db
             var roles = _context.Roles.Select(categorie => new SelectListItem { Text = categorie.Name, Value = categorie.Name }).ToList();
             
             ViewBag.roles = roles;
@@ -66,11 +64,8 @@ namespace HardPedia.Controllers
             updatedUser.NormalizedEmail = user.Email.ToUpper();
             updatedUser.PhoneNumber = user.PhoneNumber;
 
-            // get the role id from name
             
             var roleId = _context.Roles.FirstOrDefault(r => r.Name == user.Role).Id;
-
-            
             var oldUserInRole = _context.UserRoles.FirstOrDefault(ur => ur.UserId == user.Id);
 
             var newUserInRole = new IdentityUserRole<string>

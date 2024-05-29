@@ -46,7 +46,7 @@ public class SubjectController : Controller
             subject.Id = Guid.NewGuid();
             subject.CreatedOn = DateTime.Now;
             subject.Visible = true;
-            subject.UserId = userId; // Assuming you have a UserId property in the Subject model
+            subject.UserId = userId; 
 
             var category = _context.Categories.Include(c => c.Subjects).FirstOrDefault(c => c.Id == categoryId);
             if (category != null)

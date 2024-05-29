@@ -20,7 +20,6 @@ public class CommentController : Controller
         return View();
     }
 
-    // get comment by id
     public IActionResult GetComment(Guid id)
     {
         var comment = _context.Comments.FirstOrDefault(c => c.Id == id);

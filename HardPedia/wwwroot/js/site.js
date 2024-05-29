@@ -1,10 +1,4 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
-
-function confirmDelete(categoryName, deleteUrl) {
+﻿function confirmDelete(categoryName, deleteUrl) {
     if (confirm("Are you sure you want to delete the category '" + categoryName + "'?")) {
         window.location.href = deleteUrl;
     }
@@ -15,13 +9,12 @@ function fetchSubject(categoryId, url, direction) {
     fetch(`${url}?categoryId=${categoryId}&currentSubjectId=${currentSubjectId}&direction=${direction}`)
         .then(response => response.json())
         .then(data => {
-            var shortContent = formatShortContent(data.shortContent);
             document.querySelector(`#subject-container-${categoryId}`).innerHTML = `
                 <div class="subject-content" data-current-subject-id="${data.id}">
                     <div class="subject-title">
                         <a href="/Subject/ListSubject?id=${data.id}" class="subject-link h4">${data.title}</a>
                     </div>
-                    <pre class="custom-short-content">${shortContent}</pre>
+                    <pre class="custom-short-content">${data.shortContent}</pre>
                 </div>
             `;
         })
@@ -54,21 +47,24 @@ function performSearch(event, searchUrl) {
         .then(html => {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
-            
+
             doc.querySelectorAll('p').forEach(p => {
                 const pre = document.createElement('pre');
                 pre.classList.add('custom-short-content');
-                pre.innerHTML = p.innerHTML.replace(/\n/g, '<br>');
+                let content = p.innerHTML;
+                content = content.replace(/(<br\s*\/?>\s*){2}/gi, '<br>');
+                pre.innerHTML = content;
                 p.replaceWith(pre);
             });
-            
-            document.getElementById('categories-container').innerHTML = doc.documentElement.innerHTML;
-            console.log('Success:', doc.documentElement.innerHTML);
+
+            document.getElementById('categories-container').innerHTML = doc.body.innerHTML; 
         })
         .catch(error => console.error('Error:', error));
 
     return false;
 }
+
+
 
 
 
